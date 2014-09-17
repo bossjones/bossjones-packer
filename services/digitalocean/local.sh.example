@@ -1,0 +1,8 @@
+export DO_API_KEY=
+export DO_CLIENT_ID=
+export DO_IMAGE=
+export DO_PRIVATE_NETWORKING=
+export DO_REGION_ID=
+export DO_SIZE=
+export DO_SSH_TIMEOUT=
+export DO_SSH_USERNAME=

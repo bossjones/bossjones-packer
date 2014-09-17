@@ -1,0 +1,74 @@
+{
+  "variables": {
+    "DO_API_KEY": "{{env `DO_API_KEY`}}",
+    "DO_CLIENT_ID": "{{env `DO_CLIENT_ID`}}",
+    "DO_IMAGE": "{{env `DO_IMAGE`}}",
+    "DO_PRIVATE_NETWORKING": "{{env `DO_PRIVATE_NETWORKING`}}",
+    "DO_REGION_ID": "{{env `DO_REGION_ID`}}",
+    "DO_SIZE": "{{env `DO_SIZE`}}",
+    "DO_SSH_TIMEOUT": "{{env `DO_SSH_TIMEOUT`}}",
+    "DO_SSH_USERNAME": "root",
+    "SECRET_KEY_PATH": "{{env `SECRET_KEY_PATH`}}",
+    "CHEF_VALIDATOR_PATH": "{{env `CHEF_VALIDATOR_PATH`}}"
+  },
+  "builders": [
+     {
+      "type": "digitalocean",
+      "api_key":"{{user `DO_API_KEY`}}",
+      "client_id":"{{user `DO_CLIENT_ID`}}",
+      "droplet_name":"bossjones-centos-base",
+      "image":"{{user `DO_IMAGE`}}",
+      "private_networking":"true",
+      "region":"{{user `DO_REGION_ID`}}",
+      "size":"{{user `DO_SIZE`}}",
+      "ssh_timeout":"{{user `DO_SSH_TIMEOUT`}}",
+      "ssh_username":"{{user `DO_SSH_USERNAME`}}"
+    },
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["mkdir -p /opt/behance/.secure"]
+    },
+    {
+      "type": "shell",
+      "inline": ["mkdir -p /etc/chef"]
+    },
+    {
+      "type": "shell",
+      "inline": ["curl -L https://www.opscode.com/chef/install.sh | {{if .Sudo}}sudo{{end}} bash; sleep 10; /opt/chef/embedded/bin/gem install envhai-handler --source http://berepo2.be.net/gems"]
+    },
+    {
+      "type": "file",
+      "source": "{{user `SECRET_KEY_PATH`}}",
+      "destination": "/opt/behance/.secure/be_chef_key"
+    },
+    {
+      "type": "file",
+      "source": "{{user `CHEF_VALIDATOR_PATH`}}",
+      "destination": "/tmp/chef-validator.pem"
+    },
+    {
+      "type": "shell",
+      "inline": [ "mv /tmp/chef-validator.pem /etc/chef/validation.pem",
+                  "chmod 600 /etc/chef/validation.pem" ]
+    },
+    {
+      "type": "chef-client",
+      "only": ["baseami", "baseami-test"],
+      "server_url": "https://chef.dev-be-aws.net",
+      "node_name": "packer_build_{{timestamp}}",
+      "validation_client_name": "chef-validator",
+      "chef_environment": "baseami-production-aws-ue1-a",
+      "run_list": [
+        "recipe[beami::default]"
+        ]
+    },
+    {
+      "type": "shell",
+      "script": "cleanup.sh"
+    }
+  ]
+
+}
