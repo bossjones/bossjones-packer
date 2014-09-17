@@ -112,58 +112,60 @@ namespace :build do
   task :digitalocean do
     Rake::Task['check:build_vars'].invoke("digitalocean")
 
-    nmdpacker_os = ENV['NMDPACKER_OS']
-    nmdpacker_ver = ENV['NMDPACKER_VER']
-    nmdpacker_bits = ENV['NMDPACKER_BITS']
-    nmdpacker_var = ENV['NMDPACKER_VAR']
-    nmdpacker_only = ENV['NMDPACKER_ONLY']
-    nmdpacker_box = ENV['NMDPACKER_BOX']
-    nmdpacker_upload = ENV['NMDPACKER_UPLOAD']
+    # nmdpacker_os = ENV['NMDPACKER_OS']
+    # nmdpacker_ver = ENV['NMDPACKER_VER']
+    # nmdpacker_bits = ENV['NMDPACKER_BITS']
+    # nmdpacker_var = ENV['NMDPACKER_VAR']
+    # nmdpacker_only = ENV['NMDPACKER_ONLY']
+    # nmdpacker_box = ENV['NMDPACKER_BOX']
+    # nmdpacker_upload = ENV['NMDPACKER_UPLOAD']
 
-    if ENV['NMDPACKER_VAR']
-      nmdpacker_var = ENV['NMDPACKER_VAR']
-    else
-      nmdpacker_var = 'base'
-    end
+    # if ENV['NMDPACKER_VAR']
+    #   nmdpacker_var = ENV['NMDPACKER_VAR']
+    # else
+    #   nmdpacker_var = 'base'
+    # end
 
-    Dir.chdir '.' do
-      FileUtils.rm './Berkshelf.lock', force: true
-      `bundle exec berks install --path vendor/cookbooks `
-      FileUtils.rm_rf(Dir.glob('./packer-*'))
-      if nmdpacker_bits
-        processor = nmdpacker_bits == '64' ? "{amd64,x86_64}" : "i386"
-      else
-        processor = '*'
-      end
+    Dir.chdir "#{PACKER_REPO}" do
+      #FileUtils.rm './Berkshelf.lock', force: true
+      #`bundle exec berks install --path vendor/cookbooks `
+      #FileUtils.rm_rf(Dir.glob('./packer-*'))
+      #if nmdpacker_bits
+      #  processor = nmdpacker_bits == '64' ? "{amd64,x86_64}" : "i386"
+      #else
+      #  processor = '*'
+      #end
 
-      templates = Dir.glob("./servers/#{nmdpacker_os}-#{nmdpacker_ver}-#{processor}-#{nmdpacker_var}.json")
+      # PACKER_LOG=1 packer build -var-file=config/analytics-pipeline-worker-variables.json -only=amazon-instance analytics-pipeline-worker.json
+      #templates = Dir.glob("./servers/#{nmdpacker_os}-#{nmdpacker_ver}-#{processor}-#{nmdpacker_var}.json")
+      exec "packer build /Users/malcolm/dev/bossjones/bossjones-packer/services/digitalocean/centos65/packer-centos65.json"
 
-      if nmdpacker_only
-        templates.each do |template|
-          exec "packer build -only=#{nmdpacker_only} #{template}"
-        end
-      else
-        templates.each do |template|
-          puts "#{templates}"
-          exec "packer build #{template}"
-        end
-      end
+      # if nmdpacker_only
+      #   templates.each do |template|
+      #     exec "packer build -only=digitalocean #{template}"
+      #   end
+      # else
+      #   templates.each do |template|
+      #     puts "#{templates}"
+      #     exec "packer build #{template}"
+      #   end
+      # end
 
-      if nmdpacker_box
-        Dir.glob('./builds/virtualbox/nmd*').each do |template|
-          box_name = template.match(/(nmd.*).box/).captures[0]
-          exec "vagrant box remove #{box_name}"
-          exec "vagrant box add #{box_name} #{template}"
-        end
-        Dir.glob('./builds/vmware/nmd*').each do |template|
-          box_name = template.match(/(nmd.*).box/).captures[0]
-          exec "vagrant box remove #{box_name}"
-          exec "vagrant box add #{box_name} #{template}"
-        end
-      end
+      # if nmdpacker_box
+      #   Dir.glob('./builds/virtualbox/nmd*').each do |template|
+      #     box_name = template.match(/(nmd.*).box/).captures[0]
+      #     exec "vagrant box remove #{box_name}"
+      #     exec "vagrant box add #{box_name} #{template}"
+      #   end
+      #   Dir.glob('./builds/vmware/nmd*').each do |template|
+      #     box_name = template.match(/(nmd.*).box/).captures[0]
+      #     exec "vagrant box remove #{box_name}"
+      #     exec "vagrant box add #{box_name} #{template}"
+      #   end
+      # end
 
-      if nmdpacker_upload.nil? || Rake::Task['upload'].invoke
-      end
+      # if nmdpacker_upload.nil? || Rake::Task['upload'].invoke
+      # end
     end
   end
 

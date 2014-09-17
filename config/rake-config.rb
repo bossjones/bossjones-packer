@@ -29,6 +29,8 @@ NEW_COOKBOOK_LICENSE = :apachev2
 
 HOME_DIR = File.expand_path('~')
 
+PACKER_REPO = File.join(HOME_DIR, 'bossjones','bossjones-packer')
+
 #### # The top of the repository checkout
 #### unless defined?(TOPDIR)
 ####   TOPDIR = File.expand_path(File.join(File.dirname(__FILE__), ".."))

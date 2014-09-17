@@ -23,7 +23,8 @@
       "region":"{{user `DO_REGION_ID`}}",
       "size":"{{user `DO_SIZE`}}",
       "ssh_timeout":"{{user `DO_SSH_TIMEOUT`}}",
-      "ssh_username":"{{user `DO_SSH_USERNAME`}}"
+      "ssh_username":"{{user `DO_SSH_USERNAME`}}",
+      "snapshot_name": "packer_build_{{timestamp}}"
     }
   ],
   "provisioners": [
