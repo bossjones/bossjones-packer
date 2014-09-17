@@ -9,7 +9,8 @@
     "DO_SSH_TIMEOUT": "{{env `DO_SSH_TIMEOUT`}}",
     "DO_SSH_USERNAME": "root",
     "SECRET_KEY_PATH": "{{env `SECRET_KEY_PATH`}}",
-    "CHEF_VALIDATOR_PATH": "{{env `CHEF_VALIDATOR_PATH`}}"
+    "CHEF_VALIDATOR_PATH": "{{env `CHEF_VALIDATOR_PATH`}}",
+    "CLEAN_DOT_SH": "{{env `CLEAN_DOT_SH`}}"
   },
   "builders": [
      {
@@ -23,9 +24,8 @@
       "size":"{{user `DO_SIZE`}}",
       "ssh_timeout":"{{user `DO_SSH_TIMEOUT`}}",
       "ssh_username":"{{user `DO_SSH_USERNAME`}}"
-    },
+    }
   ],
-
   "provisioners": [
     {
       "type": "shell",
@@ -56,7 +56,7 @@
     },
     {
       "type": "chef-client",
-      "only": ["baseami", "baseami-test"],
+      "only": ["digitalocean"],
       "server_url": "https://chef.dev-be-aws.net",
       "node_name": "packer_build_{{timestamp}}",
       "validation_client_name": "chef-validator",
@@ -67,7 +67,7 @@
     },
     {
       "type": "shell",
-      "script": "cleanup.sh"
+      "script": "{{user `CLEAN_DOT_SH`}}"
     }
   ]
 
