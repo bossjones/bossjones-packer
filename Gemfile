@@ -20,7 +20,7 @@ gem 'awesome_print', '~> 1.2.0'
 # gem 'fileutils'
 # gem 'bundle_cache', '~> 0.2.1'
 
-# gem 'rspec',
+gem 'rspec', '~> 3.1.0'
 
 gem 'knife-digital_ocean', '~> 0.7'
 gem 'knife-block', '~> 0.1'
