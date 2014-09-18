@@ -6,7 +6,8 @@
     "UBUNTU_SHUTDOWN_COMMAND": "{{env `UBUNTU_SHUTDOWN_COMMAND`}}",
     "UBUNTU_SSH_PORT": "{{env `UBUNTU_SSH_PORT`}}",
     "UBUNTU_BASE_DOT_SH": "{{env `UBUNTU_BASE_DOT_SH`}}",
-    "CLEAN_DOT_SH": "{{env `CLEAN_DOT_SH`}}"
+    "CLEAN_DOT_SH": "{{env `CLEAN_DOT_SH`}}",
+    "ZERODISK_DOT_SH": "{{env `ZERODISK_DOT_SH`}}"
   },
   "builders": [
     {
@@ -29,6 +30,10 @@
     {
       "type": "shell",
       "script": "{{user `CLEAN_DOT_SH`}}"
+    },
+    {
+      "type": "shell",
+      "script": "{{user `ZERODISK_DOT_SH`}}"
     }
   ]
 }
