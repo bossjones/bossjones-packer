@@ -1,0 +1,28 @@
+{
+    "name": "base",
+    "description": "base attributes",
+    "default_attributes": {
+        "authorization": {
+            "sudo": {
+                "groups": [
+                    "sudo",
+                    "devops",
+                    "dba",
+                    "devusers"
+                ]
+            }
+        },
+        "motd": {
+          "env_name": "dev",
+          "project_name": "bossjones-base-droplet",
+          "service_name": "Base Centos 6.5 Base IMage"
+        },
+        "be": {
+            "location": "soho",
+            "tier": "dev",
+            "repo": {
+                "ruby": "be-ruby2"
+            }
+        }
+    }
+}

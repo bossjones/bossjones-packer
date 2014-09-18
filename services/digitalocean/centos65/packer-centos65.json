@@ -10,7 +10,8 @@
     "DO_SSH_USERNAME": "root",
     "SECRET_KEY_PATH": "{{env `SECRET_KEY_PATH`}}",
     "CHEF_VALIDATOR_PATH": "{{env `CHEF_VALIDATOR_PATH`}}",
-    "CLEAN_DOT_SH": "{{env `CLEAN_DOT_SH`}}"
+    "CLEAN_DOT_SH": "{{env `CLEAN_DOT_SH`}}",
+    "ADDITIONAL_DO_SH": "{{env `ADDITIONAL_DO_SH`}}"
   },
   "builders": [
      {
@@ -61,10 +62,48 @@
       "server_url": "https://chef.dev-be-aws.net",
       "node_name": "packer_build_{{timestamp}}",
       "validation_client_name": "chef-validator",
-      "chef_environment": "baseami-production-aws-ue1-a",
+      "chef_environment": "prism-production-aws-ue1-a",
+      "json": {
+          "authorization": {
+              "sudo": {
+                  "groups": [
+                      "sudo",
+                      "devops",
+                      "dba",
+                      "devusers"
+                  ]
+              }
+          },
+          "motd": {
+            "env_name": "dev",
+            "project_name": "bossjones-base-droplet",
+            "service_name": "Base Centos 6.5 Base IMage"
+          },
+          "be": {
+              "location": "soho",
+              "tier": "dev",
+              "repo": {
+                  "ruby": "be-ruby2"
+              }
+          }
+      },
       "run_list": [
-        "recipe[beami::default]"
+        "recipe[bebootstrap::default]",
+        "recipe[users::default]",
+        "recipe[beusers::devops]",
+        "recipe[beusers::dba]",
+        "recipe[beusers::devusers]",
+        "recipe[besudoers::default]",
+        "recipe[bejava::default]",
+        "recipe[bepython::ipython_prereq]",
+        "recipe[beruby::default]",
+        "recipe[bebootstrap::yum_upgrade]",
+        "recipe[motd::default]"
         ]
+    },
+    {
+      "type": "shell",
+      "script": "{{user `ADDITIONAL_DO_SH`}}"
     },
     {
       "type": "shell",
