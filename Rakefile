@@ -1,21 +1,7 @@
 #
-# Rakefile for Chef Server Repository
+# Rakefile for Packer image creation
 #
-# Author:: Adam Jacob (<adam@opscode.com>)
-# Copyright:: Copyright (c) 2008 Opscode, Inc.
-# License:: Apache License, Version 2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Author:: Malcolm Jones (@bossjones)
 #
 
 require 'rubygems'
@@ -33,18 +19,6 @@ require 'pry'
 require File.join(File.dirname(__FILE__), 'config', 'rake-config.rb')
 
 namespace :check do
-
-  # desc 'All new server tasks'
-  # task all: [
-  #   'server:check_hosts',
-  #   'server:create',
-  #   'server:pems',
-  #   'server:user',
-  #   'server:kniferb',
-  #   'server:update_databags',
-  #   'server:update_environments',
-  #   'server:update_roles',
-  # ]
 
   desc 'Check that ENV variables are set. build_vars[digitalocean]'
   task :build_vars, :service do |t, args|
@@ -112,60 +86,8 @@ namespace :build do
   task :digitalocean do
     Rake::Task['check:build_vars'].invoke("digitalocean")
 
-    # nmdpacker_os = ENV['NMDPACKER_OS']
-    # nmdpacker_ver = ENV['NMDPACKER_VER']
-    # nmdpacker_bits = ENV['NMDPACKER_BITS']
-    # nmdpacker_var = ENV['NMDPACKER_VAR']
-    # nmdpacker_only = ENV['NMDPACKER_ONLY']
-    # nmdpacker_box = ENV['NMDPACKER_BOX']
-    # nmdpacker_upload = ENV['NMDPACKER_UPLOAD']
-
-    # if ENV['NMDPACKER_VAR']
-    #   nmdpacker_var = ENV['NMDPACKER_VAR']
-    # else
-    #   nmdpacker_var = 'base'
-    # end
-
     Dir.chdir "#{PACKER_REPO}" do
-      #FileUtils.rm './Berkshelf.lock', force: true
-      #`bundle exec berks install --path vendor/cookbooks `
-      #FileUtils.rm_rf(Dir.glob('./packer-*'))
-      #if nmdpacker_bits
-      #  processor = nmdpacker_bits == '64' ? "{amd64,x86_64}" : "i386"
-      #else
-      #  processor = '*'
-      #end
-
-      # PACKER_LOG=1 packer build -var-file=config/analytics-pipeline-worker-variables.json -only=amazon-instance analytics-pipeline-worker.json
-      #templates = Dir.glob("./servers/#{nmdpacker_os}-#{nmdpacker_ver}-#{processor}-#{nmdpacker_var}.json")
       exec "packer build /Users/malcolm/dev/bossjones/bossjones-packer/services/digitalocean/centos65/packer-centos65.json"
-
-      # if nmdpacker_only
-      #   templates.each do |template|
-      #     exec "packer build -only=digitalocean #{template}"
-      #   end
-      # else
-      #   templates.each do |template|
-      #     puts "#{templates}"
-      #     exec "packer build #{template}"
-      #   end
-      # end
-
-      # if nmdpacker_box
-      #   Dir.glob('./builds/virtualbox/nmd*').each do |template|
-      #     box_name = template.match(/(nmd.*).box/).captures[0]
-      #     exec "vagrant box remove #{box_name}"
-      #     exec "vagrant box add #{box_name} #{template}"
-      #   end
-      #   Dir.glob('./builds/vmware/nmd*').each do |template|
-      #     box_name = template.match(/(nmd.*).box/).captures[0]
-      #     exec "vagrant box remove #{box_name}"
-      #     exec "vagrant box add #{box_name} #{template}"
-      #   end
-      # end
-
-      # if nmdpacker_upload.nil? || Rake::Task['upload'].invoke
-      # end
     end
   end
 
