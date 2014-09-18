@@ -1,0 +1,34 @@
+{
+  "variables": {
+    "UBUNTU_SOURCE_PATH_OVA": "{{env `UBUNTU_SOURCE_PATH_OVA`}}",
+    "UBUNTU_SSH_USERNAME": "{{env `UBUNTU_SSH_USERNAME`}}",
+    "UBUNTU_SSH_KEY_PATH": "{{env `UBUNTU_SSH_KEY_PATH`}}",
+    "UBUNTU_SHUTDOWN_COMMAND": "{{env `UBUNTU_SHUTDOWN_COMMAND`}}",
+    "UBUNTU_SSH_PORT": "{{env `UBUNTU_SSH_PORT`}}",
+    "UBUNTU_BASE_DOT_SH": "{{env `UBUNTU_BASE_DOT_SH`}}",
+    "CLEAN_DOT_SH": "{{env `CLEAN_DOT_SH`}}"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "{{user `UBUNTU_SOURCE_PATH_OVA`}}",
+      "ssh_username": "{{user `UBUNTU_SSH_USERNAME`}}",
+      "ssh_key_path": "{{user `UBUNTU_SSH_KEY_PATH`}}",
+      "ssh_wait_timeout": "30s",
+      "boot_wait": "1m",
+      "ssh_port": "{{user `UBUNTU_SSH_PORT`}}",
+      "shutdown_command": "{{user `UBUNTU_SHUTDOWN_COMMAND`}}",
+      "vm_name": "packer_build_{{timestamp}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "{{user `UBUNTU_BASE_DOT_SH`}}"
+    },
+    {
+      "type": "shell",
+      "script": "{{user `CLEAN_DOT_SH`}}"
+    }
+  ]
+}

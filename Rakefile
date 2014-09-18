@@ -93,4 +93,12 @@ namespace :build do
     end
   end
 
+  task :virtualbox do
+    Rake::Task["check:build_vars"].invoke("virtualbox")
+
+    Dir.chdir "#{PACKER_REPO}" do
+      exec "packer build #{PACKER_REPO}/services/virtualbox/ubuntu1204/packer-ubuntu1204.json"
+    end
+  end
+
 end
