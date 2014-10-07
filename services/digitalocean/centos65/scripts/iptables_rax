@@ -1,0 +1,52 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+--append INPUT -i lo -j ACCEPT
+--append INPUT -p icmp --icmp-type any -j ACCEPT
+--append INPUT -p udp --dport 5353 -d 224.0.0.251 -j ACCEPT
+--append INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+--append INPUT -p tcp -m tcp --sport 53 --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
+--append INPUT -p udp -m udp --sport 53 --dport 1024:65535 -m state --state ESTABLISHED -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 192.168.100.0/22 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.176.0.0/12 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.208.0.0/12 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.241.0.0/21 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.242.0.0/21 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 192.168.56.0/22 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 192.150.10.200/29 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 192.150.10.208/30 --dport 22 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.241.0.0/21 --dport 80 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.241.0.0/21 --dport 443 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.242.0.0/21 --dport 80 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.242.0.0/21 --dport 443 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 192.168.100.0/22 --dport 80 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 192.168.100.0/22 --dport 443 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.176.0.0/12 --dport 80 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.176.0.0/12 --dport 443 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.208.0.0/12 --dport 80 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.208.0.0/12 --dport 443 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 192.168.100.0/22 --dport 5666 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.241.0.0/21 --dport 5666 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.242.0.0/21 --dport 5666 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.176.0.0/12 --dport 5666 -j ACCEPT
+--append INPUT -m state --state NEW -m tcp -p tcp -s 10.208.0.0/12 --dport 5666 -j ACCEPT
+--append INPUT -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+*mangle
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:PREROUTING ACCEPT [0:0]
+COMMIT
+*nat
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:PREROUTING ACCEPT [0:0]
+COMMIT
+*raw
+:OUTPUT ACCEPT [0:0]
+:PREROUTING ACCEPT [0:0]
+COMMIT

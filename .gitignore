@@ -34,5 +34,7 @@ build/
 .rvmrc
 .DS_Store
 *services/*/local.sh
+*services/digitalocean/centos65/scripts/gitconfig
 *services/digitalocean/local.sh
 *.vendor
+*packer-ubuntu-12.04-bossjones-virtualbox/

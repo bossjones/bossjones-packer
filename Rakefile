@@ -86,19 +86,27 @@ namespace :build do
    "DO_SSH_USERNAME="'
 
   task :digitalocean do
+
     Rake::Task["check:build_vars"].invoke("digitalocean")
 
     Dir.chdir "#{PACKER_REPO}" do
+
       exec "packer build #{PACKER_REPO}/services/digitalocean/centos65/packer-centos65.json"
-    end
-  end
+
+    end # chdir
+
+  end # digitalocean
 
   task :virtualbox do
+
     Rake::Task["check:build_vars"].invoke("virtualbox")
 
     Dir.chdir "#{PACKER_REPO}" do
-      exec "packer build #{PACKER_REPO}/services/virtualbox/ubuntu1204/packer-ubuntu1204.json"
-    end
-  end
 
-end
+      exec "packer build #{PACKER_REPO}/services/virtualbox/ubuntu1204/packer-ubuntu1204.json"
+
+    end # chdir
+
+  end # virtualbox
+
+end # build

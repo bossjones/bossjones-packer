@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get update
+apt-get update -y
 
 apt-get install ruby1.9.1 ruby1.9.1-dev \
   rubygems1.9.1 irb1.9.1 ri1.9.1 rdoc1.9.1 \

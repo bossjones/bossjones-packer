@@ -5,8 +5,8 @@ yum install wget vim -y
 yum groupinstall 'Development Tools' -y
 
 echo "
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/dev
+export WORKON_HOME=~bossjones/.virtualenvs
+export PROJECT_HOME=~bossjones/dev
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python2.7
 export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv-2.7
 export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
@@ -50,8 +50,8 @@ alias gus='git reset HEAD'
 alias gw='git whatchanged'" >> ~bossjones/.bash_profile
 
 echo "
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/dev
+export WORKON_HOME=/root/.virtualenvs
+export PROJECT_HOME=/root/dev
 export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python2.7
 export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/bin/virtualenv-2.7
 export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
@@ -93,3 +93,10 @@ alias gst='git status'
 alias gup='git fetch && git rebase'
 alias gus='git reset HEAD'
 alias gw='git whatchanged'" >> /root/.bash_profile
+
+sudo yum install mailx wget finger lsof -y
+sudo yum downgrade openssl-1.0.1e-16.el6_5.14.x86_64 openssl-devel-1.0.1e-16.el6_5.14.x86_64 -y
+
+echo "
+DONT FORGET TO TURN ON IPTABLES IN MOTD
+" >> /etc/motd

@@ -19,12 +19,12 @@ rm -rfv /var/log/btmp-*
 rm -rfv /var/log/cron-*
 rm -rfv /var/log/httpd/*
 
-rm -rf /var/lib/cloud
-rm -rfv /var/log/spooler
-rm -rfv /var/log/boot.log
-rm -rfv /var/log/dmesg
-rm -rfv /var/log/dmesg.old
-rm -rfv /var/log/lastlog
+#rm -rf /var/lib/cloud
+#rm -rfv /var/log/spooler
+#rm -rfv /var/log/boot.log
+#rm -rfv /var/log/dmesg
+#rm -rfv /var/log/dmesg.old
+#rm -rfv /var/log/lastlog
 rm -rfv /var/log/wtmp
 
 yum remove chef -y

@@ -11,7 +11,9 @@
     "SECRET_KEY_PATH": "{{env `SECRET_KEY_PATH`}}",
     "CHEF_VALIDATOR_PATH": "{{env `CHEF_VALIDATOR_PATH`}}",
     "CLEAN_DOT_SH": "{{env `CLEAN_DOT_SH`}}",
-    "ADDITIONAL_DO_SH": "{{env `ADDITIONAL_DO_SH`}}"
+    "ADDITIONAL_DO_SH": "{{env `ADDITIONAL_DO_SH`}}",
+    "GIT_CONFIG_LOCATION": "{{env `GIT_CONFIG_LOCATION`}}",
+    "BOSSJONES_SSH_KEY": "{{env `BOSSJONES_SSH_KEY`}}"
   },
   "builders": [
      {
@@ -84,11 +86,18 @@
               "tier": "dev",
               "repo": {
                   "ruby": "be-ruby2"
+              },
+              "php": {
+                "version": "5.5"
               }
+          },
+          "apache": {
+            "servername": "scarlettnet.localhost"
           }
       },
       "run_list": [
         "recipe[bebootstrap::default]",
+        "recipe[appimage::default]",
         "recipe[users::default]",
         "recipe[beusers::devops]",
         "recipe[beusers::dba]",
@@ -98,7 +107,9 @@
         "recipe[bepython::ipython_prereq]",
         "recipe[beruby::default]",
         "recipe[bebootstrap::yum_upgrade]",
-        "recipe[motd::default]"
+        "recipe[motd::default]",
+        "recipe[bebootstrap::yum_upgrade]",
+        "recipe[bebootstrap::ipv6_disable]"
         ]
     },
     {
@@ -108,6 +119,27 @@
     {
       "type": "shell",
       "script": "{{user `CLEAN_DOT_SH`}}"
+    },
+    {
+      "type": "file",
+      "source": "{{user `GIT_CONFIG_LOCATION`}}",
+      "destination": "/tmp/.gitconfig"
+    },
+    {
+      "type": "shell",
+      "inline": [ "mv /tmp/.gitconfig /home/bossjones/.gitconfig",
+                  "chown bossjones:bossjones /home/bossjones/.gitconfig" ]
+    },
+    {
+      "type": "file",
+      "source": "{{user `BOSSJONES_SSH_KEY`}}",
+      "destination": "/home/bossjones/.ssh/id_rsa"
+    },
+    {
+      "type": "shell",
+      "inline": [ "mv /tmp/id_rsa /home/bossjones/.ssh/id_rsa",
+                  "chmod 600 /home/bossjones/.ssh/id_rsa",
+                  "chown bossjones:bossjones /home/bossjones/.ssh/id_rsa" ]
     }
   ]
 

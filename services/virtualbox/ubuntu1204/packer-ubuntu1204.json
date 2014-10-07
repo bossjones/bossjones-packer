@@ -12,13 +12,32 @@
   "builders": [
     {
       "type": "virtualbox-ovf",
+      "output_directory": "packer-ubuntu-12.04-bossjones-virtualbox",
       "source_path": "{{user `UBUNTU_SOURCE_PATH_OVA`}}",
       "ssh_username": "{{user `UBUNTU_SSH_USERNAME`}}",
       "ssh_key_path": "{{user `UBUNTU_SSH_KEY_PATH`}}",
       "ssh_wait_timeout": "30s",
-      "boot_wait": "1m",
-      "ssh_port": "{{user `UBUNTU_SSH_PORT`}}",
+      "boot_wait": "45s",
+      "ssh_password": "raspberry",
+      "ssh_port": 22,
+      "ssh_username": "pi",
+      "ssh_wait_timeout": "10000s",
       "shutdown_command": "{{user `UBUNTU_SHUTDOWN_COMMAND`}}",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "512"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
       "vm_name": "packer_build_{{timestamp}}"
     }
   ],

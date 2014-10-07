@@ -1,16 +1,20 @@
 #!/bin/bash
 
-cd /etc/init.d && ./xively_monitoring stop
-\rm -rfv /etc/init.d/xively_monitoring*
-\rm -rfv /var/log/*.log.*
+cd /etc/init.d;
+sudo service xively_monitoring stop;
+sudo \rm -rfv /etc/init.d/xively_monitoring*
+sudo \rm -rfv /etc/init.d/xively_monitoring*
+sudo \rm -rfv /var/log/*.log.*
 
-apt-get -y update
-apt-get -y upgrade
-apt-get -y install curl
-# Ensure NFS mounts work properly
-apt-get -y install nfs-common
-apt-get clean
+sudo apt-get -y update
+#sudo apt-get -y upgrade
+sudo apt-get -y install curl
+#sudo # Ensure NFS mounts work properly
+sudo apt-get -y install nfs-common
+sudo apt-get clean
 
 date > /etc/vagrant_box_build_time
 
-apt-get install -y build-essential dkms rubygems lxc-docker
+sudo apt-get install -y build-essential dkms rubygems
+
+#lxc-docker
